@@ -16,7 +16,14 @@
 
 #include <iostream>
 
+#include <freeglut/freeglut.h>
+
+#include <gltools/GLTools.h>
+#include "Particle.h"
 using namespace std;
+
+/** 创建一个粒子类对象 */
+CParticle Snow;
 
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {

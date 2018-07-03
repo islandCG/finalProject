@@ -45,7 +45,7 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 #define GLEW_STATIC
 #endif
 
-#include <gl\glew.h>			// OpenGL Extension "autoloader"
+#include <glfw3.h>			// OpenGL Extension "autoloader"
 #include <gl\gl.h>			// Microsoft OpenGL headers (version 1.1 by themselves)
 #endif
 
@@ -85,9 +85,9 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 // Universal includes
 #include <stdio.h>
 #include <math.h>
-#include <math3d.h>
-#include <GLBatch.h>
-#include <GLTriangleBatch.h>
+#include <gltools/math3d.h>
+#include <gltools/GLBatch.h>
+#include <gltools/GLTriangleBatch.h>
 
    
 ///////////////////////////////////////////////////////

@@ -15,14 +15,16 @@
 c:\users\zhang\coderkk\finalproject\project\project\shader_m.h(65): warning C4101: “infoLog”: 未引用的局部变量
 c:\users\zhang\coderkk\finalproject\project\project\shader_m.h(64): warning C4101: “success”: 未引用的局部变量
 c:\users\zhang\coderkk\finalproject\project\project\main.cpp(13): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(161): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(336): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(337): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(341): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(342): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(168): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(343): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
 c:\users\zhang\coderkk\finalproject\project\project\main.cpp(344): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(345): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(354): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(545): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(348): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(349): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(351): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(352): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(361): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(552): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
+  Particle.cpp
+  正在生成代码...
   project.vcxproj -> C:\Users\zhang\coderkk\finalProject\project\Debug\project.exe
