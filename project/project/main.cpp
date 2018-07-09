@@ -1,41 +1,41 @@
-#include <ft2build.h>
+ï»¿#include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glad/glad.h>
 #include <glfw3.h>
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include<sstream>
 #include "shader_m.h"
-#include "camera.h""
+#include "camera.h"
 #include <vector>
 #include "model.h"
 #include <iostream>
 #include <freeglut/freeglut.h>
 #include <gltools/GLTools.h>
 #include "Particle.h"
+#include "cloth.h"
 using namespace std;
 
-/** ´´½¨Ò»¸öÁ£×ÓÀà¶ÔÏó */
+/** åˆ›å»ºä¸€ä¸ªç²’å­ç±»å¯¹è±¡ */
 //CParticle Snow;
-///** ÓÃÀ´ÉèÖÃÁ£×ÓµÄÊôĞÔÖµ */
+///** ç”¨æ¥è®¾ç½®ç²’å­çš„å±æ€§å€¼ */
 //float x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec;
 //int r, g, b;
 
-/** ³õÊ¼»¯Ñ©»¨Á£×Ó */
+/** åˆå§‹åŒ–é›ªèŠ±ç²’å­ */
 //bool InitSnow()
 //{
 //	for (int i = 0; i < Snow.GetNumOfParticle(); ++i)
 //	{
-//		///³õÊ¼»¯ÑÕÉ«£¨°×É«£©
+//		///åˆå§‹åŒ–é¢œè‰²ï¼ˆç™½è‰²ï¼‰
 //		r = 255;
 //		g = 255;
 //		b = 255;
 //		Snow.SetColor(i, r, g, b);
 //
-//		///³õÊ¼»¯×ø±ê
+//		///åˆå§‹åŒ–åæ ‡
 //		x = 0.1f * (rand() % 50) - 2.5f;
 //		y = 2 + 0.1f * (rand() % 2);
 //		if ((int)x % 2 == 0)
@@ -44,51 +44,51 @@ using namespace std;
 //			x = -rand() % 3;
 //		Snow.SetPosition(i, x, y, z);
 //
-//		///³õÊ¼»¯ËÙ¶È
+//		///åˆå§‹åŒ–é€Ÿåº¦
 //		vx = 0.00001 * (rand() % 100);
 //		vy = 0.0000002 * (rand() % 28000);
 //		vz = 0;
 //		Snow.SetVelocity(i, vx, vy, vz);
 //
-//		///³õÊ¼»¯¼ÓËÙ¶È
+//		///åˆå§‹åŒ–åŠ é€Ÿåº¦
 //		ax = 0;
 //		ay = 0.000005f;
 //		az = 0;
 //		Snow.SetAcceleration(i, ax, ay, az);
 //
-//		///³õÊ¼»¯ÉúÃüÖÜÆÚ
+//		///åˆå§‹åŒ–ç”Ÿå‘½å‘¨æœŸ
 //		lifetime = 100;
 //		Snow.SetLifeTime(i, lifetime);
 //
-//		///ÏûÊ§ËÙ¶È
+//		///æ¶ˆå¤±é€Ÿåº¦
 //		dec = 0.005 * (rand() % 50);
 //		Snow.SetDec(i, dec);
 //
-//		///³õÊ¼»¯´óĞ¡
+//		///åˆå§‹åŒ–å¤§å°
 //		Snow.SetSize(i, 0.03f);
 //	}
 //	return true;
 //}
-/** ¸üĞÂÁ£×Ó */
+/** æ›´æ–°ç²’å­ */
 //void UpdateSnow()
 //{
-//	/** ¸üĞÂÎ»ÖÃ */
+//	/** æ›´æ–°ä½ç½® */
 //	x += (vx * 5);
 //	y -= vy;
 //
-//	/** ¸üĞÂËÙ¶È */
+//	/** æ›´æ–°é€Ÿåº¦ */
 //	vy += ay;
 //
-//	/** ¸üĞÂÉú´æÊ±¼ä */
+//	/** æ›´æ–°ç”Ÿå­˜æ—¶é—´ */
 //	lifetime -= dec;
 //
 //	if (x > 3)
 //		x = -2;
 //
-//	/** Èç¹ûÁ£×ÓÏûÊ§»òÉúÃü½áÊø */
+//	/** å¦‚æœç²’å­æ¶ˆå¤±æˆ–ç”Ÿå‘½ç»“æŸ */
 //	if (y <= -1 || lifetime <= 0)
 //	{
-//		/** ³õÊ¼»¯Î»ÖÃ */
+//		/** åˆå§‹åŒ–ä½ç½® */
 //		x = 0.1f * (rand() % 50) - 2.5f;
 //		y = 2 + 0.1f * (rand() % 2);
 //		if ((int)x % 2 == 0)
@@ -96,12 +96,12 @@ using namespace std;
 //		else
 //			z = -rand() % 3;
 //
-//		/** ³õÊ¼»¯ËÙ¶È */
+//		/** åˆå§‹åŒ–é€Ÿåº¦ */
 //		vx = (float)(0.00001 * (rand() % 100));
 //		vy = (float)(0.0000002 * (rand() % 28000));
 //		vz = 0;
 //
-//		/** ³õÊ¼»¯¼ÓËÙ¶È */
+//		/** åˆå§‹åŒ–åŠ é€Ÿåº¦ */
 //		ax = 0;
 //		ay = 0.000005f;
 //		az = 0;
@@ -111,18 +111,18 @@ using namespace std;
 //}
 //void DrawParticle()
 //{
-//	/** °ó¶¨ÎÆÀí */
+//	/** ç»‘å®šçº¹ç† */
 //	glBindTexture(GL_TEXTURE_2D, texName[1]);
 //
 //	for (int i = 0; i<Snow.GetNumOfParticle(); ++i)
 //	{
-//		/** »ñµÃÁ£×ÓµÄËùÓĞÊôĞÔ */
+//		/** è·å¾—ç²’å­çš„æ‰€æœ‰å±æ€§ */
 //		Snow.GetAll(i, r, g, b, x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec);
 //		glLoadIdentity();
 //		glTranslatef(0.0f, 0.0f, -6.0f);
 //		glColor4ub(r, g, b, 255);
-//		glNormal3f(0.0f, 0.0f, 1.0f);   /**< ¶¨Òå·¨Ïß·½Ïò */
-//										/** »­³öÁ£×Ó */
+//		glNormal3f(0.0f, 0.0f, 1.0f);   /**< å®šä¹‰æ³•çº¿æ–¹å‘ */
+//										/** ç”»å‡ºç²’å­ */
 //		glBegin(GL_QUADS);
 //		glTexCoord2f(0.0f, 0.0f); glVertex3f(x - size, y - size, z);
 //		glTexCoord2f(1.0f, 0.0f); glVertex3f(x - size, y + size, z);
@@ -130,11 +130,11 @@ using namespace std;
 //		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + size, y - size, z);
 //		glEnd();
 //
-//		/** ¸üĞÂÁ£×ÓÊôĞÔ */
+//		/** æ›´æ–°ç²’å­å±æ€§ */
 //		UpdateSnow();
 //		Snow.SetAll(i, r, g, b, x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec);
 //	}
-//	glutPostRedisplay();//·¢ËÍäÖÈ¾ÇëÇó
+//	glutPostRedisplay();//å‘é€æ¸²æŸ“è¯·æ±‚
 //}
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {
@@ -188,7 +188,9 @@ int main()
 
 	Shader skyboxShader("./skybox.vs", "./skybox.fs");
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
-	Model ourModel("./newbeach/beach2.obj");
+	Shader clothShader("./cloth.vs", "./cloth.fs");
+	Model ourModel("./newbeach/beach_final_test.obj");
+	ClothUtil ourCloth = ClothUtil(15);
 
 
 	float skyboxVertices[] = {
@@ -245,7 +247,7 @@ int main()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-
+	
 
 	vector<string> faces
 	{
@@ -285,11 +287,11 @@ int main()
 		// input
 		// -----
 		processInput(window);
-		//°´qÏòÉÏÒÆ¶¯¾µÍ·
+		//æŒ‰qå‘ä¸Šç§»åŠ¨é•œå¤´
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 			modelPos.y -= 25 * deltaTime;
 		}
-		//°´eÏòÏÂÒÆ¶¯¾µÍ·
+		//æŒ‰eå‘ä¸‹ç§»åŠ¨é•œå¤´
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			modelPos.y += 25 * deltaTime;
 		}
@@ -300,6 +302,7 @@ int main()
 
 		// display text
 		{
+			glEnable(GL_CULL_FACE);
 			stringstream ss;
 			ss << fps;;
 			string temp;
@@ -367,6 +370,31 @@ int main()
 			glDepthFunc(GL_LESS); // set depth function back to default
 		}
 
+		//cloth
+		{
+			glDisable(GL_CULL_FACE);
+			clothShader.use();
+			glm::mat4 model;
+			model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0, 5, -2));
+			model = glm::translate(model, glm::vec3(0, 5, 10));
+			model = glm::scale(model, glm::vec3(3, 3, 3));
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 view = camera.GetViewMatrix();
+			clothShader.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+			clothShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+			clothShader.setMat4("projection", projection);
+			clothShader.setMat4("view", view);
+			clothShader.setMat4("model", model);
+			clothShader.setVec3("lightPos", lightPos);
+			clothShader.setVec3("viewPos", camera.Position);
+			clothShader.setFloat("ambientStrength", 0.1);
+			clothShader.setFloat("diffStrength", 0.8);
+			clothShader.setFloat("specularStrength", 1);
+			clothShader.setInt("shiny", 32);
+			ourCloth.ClothSimulating(clothShader, deltaTime, 0.098, 0.5, 0.5, glm::vec3(2, 0, 1));
+		}
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -407,7 +435,8 @@ GLFWwindow* initOpenGL() {
 	glfwSetScrollCallback(window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -619,7 +648,7 @@ void initText(Shader textShader) {
 	if (FT_New_Face(ft, "C:/Windows/Fonts/Arial.ttf", 0, &face))
 		cout << "ERROR::FREETYPE: Failed to load font" << endl;
 
-	// ÉèÖÃ×ÖÌå¿í¶ÈºÍ¸ß¶È¿í¶ÈÉèÖÃÎª0¸ù¾İ¸ß¶È¶¯Ì¬¼ÆËã
+	// è®¾ç½®å­—ä½“å®½åº¦å’Œé«˜åº¦å®½åº¦è®¾ç½®ä¸º0æ ¹æ®é«˜åº¦åŠ¨æ€è®¡ç®—
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
 	// Disable byte-alignment restriction
