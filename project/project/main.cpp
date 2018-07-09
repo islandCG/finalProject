@@ -38,8 +38,8 @@ unsigned int loadCubemap(vector<string> faces);
 
 GLFWwindow* initOpenGL();
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -53,7 +53,7 @@ float lastFrame = 0.0f;
 float fps = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 1000.0f, 200.0f);
+glm::vec3 lightPos(20.0f, 20.0f, 20.0f);
 
 
 int main()
@@ -224,7 +224,7 @@ int main()
 		// - Get light projection/view matrix.
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
-		GLfloat near_plane = 1.0f, far_plane = 7.5f;
+		GLfloat near_plane = 1.0f, far_plane = 100.0f;
 		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 		//lightProjection = glm::perspective(90.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
@@ -273,10 +273,12 @@ int main()
 			////model = glm::translate(model, glm::vec3(0.0f, -50.0f, 0.0f));
 			////model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 			//modelShader.setMat4("model", model);
+			glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			modelShader.use();
-			modelShader.setInt("shadowMap", 1);
-			modelShader.setVec3("light.position", lightPos);
-			modelShader.setVec3("viewPos", camera.Position);
+			//modelShader.setInt("shadowMap", 1);
+			//modelShader.setVec3("light.position", lightPos);
+			//modelShader.setVec3("viewPos", camera.Position);
 
 			// light properties
 			modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
@@ -294,6 +296,9 @@ int main()
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
+
+			modelShader.setVec3("viewPos", camera.Position);
+			modelShader.setVec3("light.position", lightPos);
 			modelShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
 			glActiveTexture(GL_TEXTURE1);
@@ -317,9 +322,9 @@ int main()
 
 		// skybox
 		{
-			lightPos.y = sin(glfwGetTime() / 2.0f) * 100.0f;
+			lightPos.y = sin(glfwGetTime() / 3.0f) * 20.0f;
 			cout << "y  " << lightPos.y << endl;
-			lightPos.z = sin(glfwGetTime() / 2.0f) * 100.0f;
+			lightPos.z = sin(glfwGetTime() / 3.0f) * 20.0f;
 			glm::mat4 view = camera.GetViewMatrix();
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			// draw skybox as last
@@ -436,22 +441,22 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		lightPos.y += 10.0f;
+		lightPos.y += 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		lightPos.y -= 10.0f;
+		lightPos.y -= 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		lightPos.z += 10.0f;
+		lightPos.z += 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		lightPos.z -= 10.0f;
+		lightPos.z -= 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 }

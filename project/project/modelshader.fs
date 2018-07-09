@@ -54,8 +54,8 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // 检查当前片元是否在阴影中
     float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
 
-    // return shadow;
-    return 0;
+    return shadow;
+    //return 0;
 }
 
 void main()
@@ -63,24 +63,26 @@ void main()
     // ambient
     vec3 color = texture(material.diffuse, TexCoords).rgb;
     vec3 ambient = light.ambient * texture(material.diffuse, TexCoords).rgb;
+    vec3 lightColor = vec3(1.0);
   	
     // diffuse 
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(light.position - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb;  
-    
+    //vec3 diffuse = diff * lightColor;
     // specular
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = light.specular * (spec * material.specular);  
-        
+    //vec3 specular = spec * lightColor;
+
     vec3 result = ambient + diffuse + specular;
     
     // 计算阴影
     float shadow = ShadowCalculation(FragPosLightSpace);     
-    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));    
+    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
 
     // FragColor = vec4(result, 1.0);
     FragColor = vec4(lighting, 1.0);
