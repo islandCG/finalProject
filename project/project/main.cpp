@@ -54,7 +54,7 @@ float lastFrame = 0.0f;
 float fps = 0.0f;
 
 // lighting
-glm::vec3 lightPos(20.0f, 15.0f, 20.0f);
+glm::vec3 lightPos(10.0f, 25.0f, 10.0f);
 
 
 int main()
@@ -74,7 +74,7 @@ int main()
 	Shader depthShader("./depthshader.vs", "./depthshader.fs");
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
 	Shader clothShader("./cloth.vs", "./cloth.fs");
-	Model ourModel("./newbeach/beach_final_test.obj");
+	Model ourModel("./newbeach/beach_balance.obj");
 	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
 	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(5, 10, -5));
@@ -229,7 +229,7 @@ int main()
 		glm::mat4 lightSpaceMatrix;
 		GLfloat near_plane = 1.0f, far_plane = 100.0f;
 		//lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		lightProjection = glm::perspective(45.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
+		lightProjection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 		lightSpaceMatrix = lightProjection * lightView;
 
@@ -313,7 +313,7 @@ int main()
 		// skybox
 		{
 			lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
-			cout << "y  " << lightPos.y << endl;
+			//cout << "y  " << lightPos.y << endl;
 			lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
 			glm::mat4 view = camera.GetViewMatrix();
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
