@@ -1,30 +1,20 @@
-﻿#define _CRT_SECURE_NO_WARNINGS    
-#include <ft2build.h>
+﻿#include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glad/glad.h>
 #include <glfw3.h>
-
-//#include <gltools/GLTools.h>
-//#include <gl/GL.h>
-//#include <gl/GLU.h>
-
-
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include<sstream>
 #include "shader_m.h"
-#include "camera.h""
-#include <vector>
+#include "camera.h"
 #include "model.h"
 #include <iostream>
 #include <freeglut/freeglut.h>
-
 #include "Particle.h"
+#include "cloth.h"
 using namespace std;
-
 
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {
@@ -82,7 +72,9 @@ int main()
 	Shader skyboxShader("./skybox.vs", "./skybox.fs");
 	Shader depthShader("./depthshader.vs", "./depthshader.fs");
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
-	Model ourModel("./newbeach/beach2.obj");
+	Shader clothShader("./cloth.vs", "./cloth.fs");
+	Model ourModel("./newbeach/beach_final_test.obj");
+	ClothUtil ourCloth = ClothUtil(15);
 
 
 	float skyboxVertices[] = {
@@ -144,7 +136,6 @@ int main()
 	{
 		("resources/textures/skybox/front.jpg"),
 		("resources/textures/skybox/back.jpg"),
-
 		("resources/textures/skybox/top.jpg"),
 		("resources/textures/skybox/bottom.jpg"),
 		("resources/textures/skybox/right.jpg"),
@@ -218,6 +209,7 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 		// 1. Render depth of scene to texture (from light's perspective)
 		// - Get light projection/view matrix.
 		glm::mat4 lightProjection, lightView;
@@ -239,6 +231,18 @@ int main()
 			depthShader.setMat4("model", model);
 			ourModel.Draw(depthShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// display text
+		{
+			glEnable(GL_CULL_FACE);
+			stringstream ss;
+			ss << fps;;
+			string temp;
+			ss >> temp;
+			ss.clear();
+			string fpsShow = "FPS:  " + temp;
+			RenderText(textShader, fpsShow, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+		}
 
 		// Reset viewport
 		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
@@ -320,6 +324,31 @@ int main()
 			glDepthFunc(GL_LESS); // set depth function back to default
 		}
 
+		//cloth
+		{
+			glDisable(GL_CULL_FACE);
+			clothShader.use();
+			glm::mat4 model;
+			model = glm::mat4();
+			//model = glm::translate(model, glm::vec3(0, 5, -2));
+			model = glm::translate(model, glm::vec3(0, 5, 10));
+			model = glm::scale(model, glm::vec3(3, 3, 3));
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 view = camera.GetViewMatrix();
+			clothShader.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+			clothShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+			clothShader.setMat4("projection", projection);
+			clothShader.setMat4("view", view);
+			clothShader.setMat4("model", model);
+			clothShader.setVec3("lightPos", lightPos);
+			clothShader.setVec3("viewPos", camera.Position);
+			clothShader.setFloat("ambientStrength", 0.1);
+			clothShader.setFloat("diffStrength", 0.8);
+			clothShader.setFloat("specularStrength", 1);
+			clothShader.setInt("shiny", 32);
+			ourCloth.ClothSimulating(clothShader, deltaTime, 0.098, 0.5, 0.5, glm::vec3(2, 0, 1));
+		}
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -362,6 +391,7 @@ GLFWwindow* initOpenGL() {
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
