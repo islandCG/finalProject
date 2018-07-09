@@ -21,9 +21,6 @@
     <ClCompile Include="glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Particle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="stb_image.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -41,10 +38,10 @@
     <ClInclude Include="mesh.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Particle.h">
+    <ClInclude Include="cloth.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="cloth.h">
+    <ClInclude Include="particle.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

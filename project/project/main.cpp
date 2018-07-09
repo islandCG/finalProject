@@ -14,128 +14,10 @@
 #include <iostream>
 #include <freeglut/freeglut.h>
 #include <gltools/GLTools.h>
-#include "Particle.h"
 #include "cloth.h"
+#include "particle.h"
 using namespace std;
 
-/** 创建一个粒子类对象 */
-//CParticle Snow;
-///** 用来设置粒子的属性值 */
-//float x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec;
-//int r, g, b;
-
-/** 初始化雪花粒子 */
-//bool InitSnow()
-//{
-//	for (int i = 0; i < Snow.GetNumOfParticle(); ++i)
-//	{
-//		///初始化颜色（白色）
-//		r = 255;
-//		g = 255;
-//		b = 255;
-//		Snow.SetColor(i, r, g, b);
-//
-//		///初始化坐标
-//		x = 0.1f * (rand() % 50) - 2.5f;
-//		y = 2 + 0.1f * (rand() % 2);
-//		if ((int)x % 2 == 0)
-//			z = rand() % 6;
-//		else
-//			x = -rand() % 3;
-//		Snow.SetPosition(i, x, y, z);
-//
-//		///初始化速度
-//		vx = 0.00001 * (rand() % 100);
-//		vy = 0.0000002 * (rand() % 28000);
-//		vz = 0;
-//		Snow.SetVelocity(i, vx, vy, vz);
-//
-//		///初始化加速度
-//		ax = 0;
-//		ay = 0.000005f;
-//		az = 0;
-//		Snow.SetAcceleration(i, ax, ay, az);
-//
-//		///初始化生命周期
-//		lifetime = 100;
-//		Snow.SetLifeTime(i, lifetime);
-//
-//		///消失速度
-//		dec = 0.005 * (rand() % 50);
-//		Snow.SetDec(i, dec);
-//
-//		///初始化大小
-//		Snow.SetSize(i, 0.03f);
-//	}
-//	return true;
-//}
-/** 更新粒子 */
-//void UpdateSnow()
-//{
-//	/** 更新位置 */
-//	x += (vx * 5);
-//	y -= vy;
-//
-//	/** 更新速度 */
-//	vy += ay;
-//
-//	/** 更新生存时间 */
-//	lifetime -= dec;
-//
-//	if (x > 3)
-//		x = -2;
-//
-//	/** 如果粒子消失或生命结束 */
-//	if (y <= -1 || lifetime <= 0)
-//	{
-//		/** 初始化位置 */
-//		x = 0.1f * (rand() % 50) - 2.5f;
-//		y = 2 + 0.1f * (rand() % 2);
-//		if ((int)x % 2 == 0)
-//			z = rand() % 6;
-//		else
-//			z = -rand() % 3;
-//
-//		/** 初始化速度 */
-//		vx = (float)(0.00001 * (rand() % 100));
-//		vy = (float)(0.0000002 * (rand() % 28000));
-//		vz = 0;
-//
-//		/** 初始化加速度 */
-//		ax = 0;
-//		ay = 0.000005f;
-//		az = 0;
-//		lifetime = 100;
-//		dec = 0.005*(rand() % 50);
-//	}
-//}
-//void DrawParticle()
-//{
-//	/** 绑定纹理 */
-//	glBindTexture(GL_TEXTURE_2D, texName[1]);
-//
-//	for (int i = 0; i<Snow.GetNumOfParticle(); ++i)
-//	{
-//		/** 获得粒子的所有属性 */
-//		Snow.GetAll(i, r, g, b, x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec);
-//		glLoadIdentity();
-//		glTranslatef(0.0f, 0.0f, -6.0f);
-//		glColor4ub(r, g, b, 255);
-//		glNormal3f(0.0f, 0.0f, 1.0f);   /**< 定义法线方向 */
-//										/** 画出粒子 */
-//		glBegin(GL_QUADS);
-//		glTexCoord2f(0.0f, 0.0f); glVertex3f(x - size, y - size, z);
-//		glTexCoord2f(1.0f, 0.0f); glVertex3f(x - size, y + size, z);
-//		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + size, y + size, z);
-//		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + size, y - size, z);
-//		glEnd();
-//
-//		/** 更新粒子属性 */
-//		UpdateSnow();
-//		Snow.SetAll(i, r, g, b, x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec);
-//	}
-//	glutPostRedisplay();//发送渲染请求
-//}
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {
 	GLuint TextureID;   // ID handle of the glyph texture
@@ -190,7 +72,9 @@ int main()
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
 	Shader clothShader("./cloth.vs", "./cloth.fs");
 	Model ourModel("./newbeach/beach_final_test.obj");
+	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
+	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(5, 10, -5));
 
 
 	float skyboxVertices[] = {
@@ -302,7 +186,6 @@ int main()
 
 		// display text
 		{
-			glEnable(GL_CULL_FACE);
 			stringstream ss;
 			ss << fps;;
 			string temp;
@@ -314,18 +197,6 @@ int main()
 
 		//model
 		{
-			//modelShader.use();
-
-			//glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
-			//glm::mat4 view = camera.GetViewMatrix();
-			//modelShader.setMat4("projection", projection);
-			//modelShader.setMat4("view", view);
-
-			//glm::mat4 model;
-			//model = glm::translate(model, modelPos);
-			////model = glm::translate(model, glm::vec3(0.0f, -50.0f, 0.0f));
-			////model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-			//modelShader.setMat4("model", model);
 			modelShader.use();
 			modelShader.setVec3("light.position", lightPos);
 			modelShader.setVec3("viewPos", camera.Position);
@@ -372,7 +243,6 @@ int main()
 
 		//cloth
 		{
-			glDisable(GL_CULL_FACE);
 			clothShader.use();
 			glm::mat4 model;
 			model = glm::mat4();
@@ -393,6 +263,36 @@ int main()
 			clothShader.setFloat("specularStrength", 1);
 			clothShader.setInt("shiny", 32);
 			ourCloth.ClothSimulating(clothShader, deltaTime, 0.098, 0.5, 0.5, glm::vec3(2, 0, 1));
+		}
+
+		//particles
+		{
+			modelShader.use();
+			modelShader.setVec3("light.position", lightPos);
+			modelShader.setVec3("viewPos", camera.Position);
+
+			// light properties
+			modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+			modelShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+			modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+			// material properties
+			modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			modelShader.setFloat("material.shininess", 64.0f);
+
+			// view/projection transformations
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 view = camera.GetViewMatrix();
+			modelShader.setMat4("projection", projection);
+			modelShader.setMat4("view", view);
+			ourParticle.simulate(deltaTime);
+			for (int i = 0; i < ourParticle.particles.size(); i++) {
+				//modelShader.setFloat("alpha", ourParticle.particles[i].color.a);
+				glm::mat4 model = ourParticle.particles[i].model;
+				modelShader.setMat4("model", model);
+				flowerModel.Draw(modelShader);
+			}
+			
 		}
 
 		glfwSwapBuffers(window);
@@ -435,8 +335,8 @@ GLFWwindow* initOpenGL() {
 	glfwSetScrollCallback(window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -627,7 +527,7 @@ void RenderText(Shader &shader, string text, GLfloat x, GLfloat y, GLfloat scale
 
 void initText(Shader textShader) {
 	// Set OpenGL options
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
