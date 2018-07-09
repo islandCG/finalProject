@@ -33,13 +33,14 @@ void RenderText(Shader &shader, std::string text, GLfloat x, GLfloat y, GLfloat 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(const char *path);
 unsigned int loadCubemap(vector<string> faces);
 
 GLFWwindow* initOpenGL();
 // settings
-const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_WIDTH = 1080;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
@@ -53,8 +54,12 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float fps = 0.0f;
 
+//dayornight
+bool dnFlag = false;
+bool firstChange = false;
+
 // lighting
-glm::vec3 lightPos(0.0f, 1000.0f, 200.0f);
+glm::vec3 lightPos(10.0f, 25.0f, 10.0f);
 
 
 int main()
@@ -77,7 +82,7 @@ int main()
 	Model ourModel("./newbeach/beach_final_test.obj");
 	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
-	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(5, 10, -5));
+	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-10, 10, -15) + glm::vec3(-22, -12, -77));
 
 
 	float skyboxVertices[] = {
@@ -210,12 +215,25 @@ int main()
 		// -----
 		processInput(window);
 		//按q向上移动镜头
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
 			modelPos.y -= 25 * deltaTime;
 		}
 		//按e向下移动镜头
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
 			modelPos.y += 25 * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+			modelPos.x -= 25 * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
+			modelPos.x += 25 * deltaTime;
+			cout << 3 << endl;
+		}
+		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
+			modelPos.z -= 25 * deltaTime;
+		}
+		if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
+			modelPos.z += 25 * deltaTime;
 		}
 		// render
 		// ------
@@ -227,9 +245,9 @@ int main()
 		// - Get light projection/view matrix.
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
-		GLfloat near_plane = 1.0f, far_plane = 7.5f;
-		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		//lightProjection = glm::perspective(90.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
+		GLfloat near_plane = 1.0f, far_plane = 1000.0f;
+		//lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+		lightProjection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 		lightSpaceMatrix = lightProjection * lightView;
 
@@ -263,10 +281,12 @@ int main()
 		// 2. 像往常一样渲染场景，但这次使用深度贴图
 		//model
 		{
+			glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			modelShader.use();
-			modelShader.setInt("shadowMap", 1);
-			modelShader.setVec3("light.position", lightPos);
-			modelShader.setVec3("viewPos", camera.Position);
+			//modelShader.setInt("shadowMap", 1);
+			//modelShader.setVec3("light.position", lightPos);
+			//modelShader.setVec3("viewPos", camera.Position);
 
 			// light properties
 			modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
@@ -280,16 +300,20 @@ int main()
 			modelShader.setFloat("material.shininess", 16.0f);
 
 			// view/projection transformations
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
+
+			modelShader.setVec3("viewPos", camera.Position);
+			modelShader.setVec3("light.position", lightPos);
 			modelShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
 			glActiveTexture(GL_TEXTURE1);
 			glBindTexture(GL_TEXTURE_2D, depthMap);
 			// world transformation
 			glm::mat4 model;
+			model = glm::translate(model, glm::vec3(-22, -12, -77));
 			modelShader.setMat4("model", model);
 			ourModel.Draw(modelShader);
 		}
@@ -307,11 +331,19 @@ int main()
 
 		// skybox
 		{
-			lightPos.y = sin(glfwGetTime() / 2.0f) * 100.0f;
-			cout << "y  " << lightPos.y << endl;
-			lightPos.z = sin(glfwGetTime() / 2.0f) * 100.0f;
+			if (dnFlag) {
+				lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
+				//cout << "y  " << lightPos.y << endl;
+				lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
+			}
+			else {
+				if (firstChange) {
+					lightPos = glm::vec3((10.0f, 25.0f, 10.0f));
+					firstChange = false;
+				}
+			}
 			glm::mat4 view = camera.GetViewMatrix();
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			// draw skybox as last
 			glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 			skyboxShader.use();
@@ -337,9 +369,9 @@ int main()
 			glm::mat4 model;
 			model = glm::mat4();
 			//model = glm::translate(model, glm::vec3(0, 5, -2));
-			model = glm::translate(model, glm::vec3(0, 5, 10));
+			model = glm::translate(model, glm::vec3(0, 5, 10) + glm::vec3(-22, -12, -77));
 			model = glm::scale(model, glm::vec3(3, 3, 3));
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			clothShader.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 			clothShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -371,7 +403,7 @@ int main()
 			modelShader.setFloat("material.shininess", 64.0f);
 
 			// view/projection transformations
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
@@ -424,10 +456,11 @@ GLFWwindow* initOpenGL() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetKeyCallback(window, key_callback);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -455,24 +488,37 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		lightPos.y += 10.0f;
+		lightPos.y += 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		lightPos.y -= 10.0f;
+		lightPos.y -= 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		lightPos.z += 10.0f;
+		lightPos.z += 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		lightPos.z -= 10.0f;
+		lightPos.z -= 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
+}
+
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod) {
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		dnFlag = !dnFlag;
+		firstChange = true;
+	}
+	//if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+	//	camera.ProcessKeyboard(FORWARD, deltaTime);
+	//}
+	//if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+	//	camera.ProcessKeyboard(BACKWARD, deltaTime);
+	//}
 }
 
 // glfw: whenever the window Size changed (by OS or user resize) this callback function executes
