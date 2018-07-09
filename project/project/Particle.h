@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifndef PARTICLE_H
 #define PARTICLE_H
 

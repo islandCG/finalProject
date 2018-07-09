@@ -9,7 +9,6 @@
 #include<sstream>
 #include "shader_m.h"
 #include "camera.h"
-#include <vector>
 #include "model.h"
 #include <iostream>
 #include <freeglut/freeglut.h>
@@ -55,7 +54,9 @@ float lastFrame = 0.0f;
 float fps = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 0.0f, 15.0f);
+glm::vec3 lightPos(0.0f, 1000.0f, 200.0f);
+
+
 int main()
 {
 	GLFWwindow* window = initOpenGL();
@@ -66,9 +67,11 @@ int main()
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE); // Enabled by default on some drivers, but not all so always enable to make sure
 
 
 	Shader skyboxShader("./skybox.vs", "./skybox.fs");
+	Shader depthShader("./depthshader.vs", "./depthshader.fs");
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
 	Shader clothShader("./cloth.vs", "./cloth.fs");
 	Model ourModel("./newbeach/beach_final_test.obj");
@@ -131,30 +134,65 @@ int main()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-	
 
-	vector<string> faces
+	vector<string> facesDay
 	{
-		("resources/textures/skybox/right.jpg"),
-		("resources/textures/skybox/left.jpg"),
+		("resources/textures/skybox/front.jpg"),
+		("resources/textures/skybox/back.jpg"),
 		("resources/textures/skybox/top.jpg"),
 		("resources/textures/skybox/bottom.jpg"),
-		("resources/textures/skybox/back.jpg"),
-		("resources/textures/skybox/front.jpg")
+		("resources/textures/skybox/right.jpg"),
+		("resources/textures/skybox/left.jpg")
 	};
-	unsigned int cubemapTexture = loadCubemap(faces);
+	unsigned int cubemapTextureDay = loadCubemap(facesDay);
 
-
+	vector<string> facesNight
+	{
+		("resources/textures/skybox1/front.jpg"),
+		("resources/textures/skybox1/back.jpg"),
+		("resources/textures/skybox1/top.jpg"),
+		("resources/textures/skybox1/bottom.jpg"),
+		("resources/textures/skybox1/right.jpg"),
+		("resources/textures/skybox1/left.jpg")
+	};
+	unsigned int cubemapTextureNight = loadCubemap(facesNight);
 
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
+	// Depth Map
+	// --------------------
+	GLuint depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+
+	const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
+	GLuint depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	GLfloat borderColor[] = { 1.0, 1.0, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Model Config
+	// --------------------
 	glm::vec3 modelPos = glm::vec3(0, 0, 0);
 
 	// shader configuration
 	// --------------------
 	modelShader.use();
 	modelShader.setInt("material.diffuse", 0);
+	modelShader.setInt("shadowMap", 1);
 
 	// render loop
 	// -----------
@@ -184,6 +222,29 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+		// 1. Render depth of scene to texture (from light's perspective)
+		// - Get light projection/view matrix.
+		glm::mat4 lightProjection, lightView;
+		glm::mat4 lightSpaceMatrix;
+		GLfloat near_plane = 1.0f, far_plane = 7.5f;
+		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+		//lightProjection = glm::perspective(90.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
+		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		lightSpaceMatrix = lightProjection * lightView;
+
+		// - render scene from light's point of view
+		depthShader.use();
+		depthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glm::mat4 model;
+			depthShader.setMat4("model", model);
+			ourModel.Draw(depthShader);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 		// display text
 		{
 			stringstream ss;
@@ -195,9 +256,15 @@ int main()
 			RenderText(textShader, fpsShow, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 		}
 
+		// Reset viewport
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// 2. 像往常一样渲染场景，但这次使用深度贴图
 		//model
 		{
 			modelShader.use();
+			modelShader.setInt("shadowMap", 1);
 			modelShader.setVec3("light.position", lightPos);
 			modelShader.setVec3("viewPos", camera.Position);
 
@@ -207,23 +274,42 @@ int main()
 			modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 			// material properties
-			modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-			modelShader.setFloat("material.shininess", 64.0f);
+			// modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			modelShader.setVec3("material.specular", 0.1f, 0.1f, 0.1f);
+			// modelShader.setFloat("material.shininess", 64.0f);
+			modelShader.setFloat("material.shininess", 16.0f);
 
 			// view/projection transformations
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
+			modelShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, depthMap);
 			// world transformation
 			glm::mat4 model;
 			modelShader.setMat4("model", model);
 			ourModel.Draw(modelShader);
 		}
 
+		// display text
+		{
+			stringstream ss;
+			ss << fps;;
+			string temp;
+			ss >> temp;
+			ss.clear();
+			string fpsShow = "FPS:  " + temp;
+			RenderText(textShader, fpsShow, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+		}
+
 		// skybox
 		{
+			lightPos.y = sin(glfwGetTime() / 2.0f) * 100.0f;
+			cout << "y  " << lightPos.y << endl;
+			lightPos.z = sin(glfwGetTime() / 2.0f) * 100.0f;
 			glm::mat4 view = camera.GetViewMatrix();
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			// draw skybox as last
@@ -235,7 +321,11 @@ int main()
 			// skybox cube
 			glBindVertexArray(skyboxVAO);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+			if (lightPos.y >= 0.0f) {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureDay);
+			}    else {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureNight);
+			}
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 			glBindVertexArray(0);
 			glDepthFunc(GL_LESS); // set depth function back to default
@@ -314,9 +404,10 @@ GLFWwindow* initOpenGL() {
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
@@ -335,8 +426,8 @@ GLFWwindow* initOpenGL() {
 	glfwSetScrollCallback(window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -363,9 +454,28 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		lightPos.y += 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		lightPos.y -= 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		lightPos.z += 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		lightPos.z -= 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// glfw: whenever the window Size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {

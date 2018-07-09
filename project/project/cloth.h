@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #ifndef CLOTH_SIMULATION
 #define CLOTH_SIMULATION
 
@@ -135,7 +135,7 @@ void ClothUtil::CreateClothVertex() {
 	glBufferData(GL_ARRAY_BUFFER, cVers.size() * sizeof(ClothVertex), &cVers[0], GL_STREAM_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-	//¶¥µãÎ»ÖÃºÍ·¨ÏòÁ¿
+	//é¡¶ç‚¹ä½ç½®å’Œæ³•å‘é‡
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ClothVertex), (void*)0);
 	glEnableVertexAttribArray(1);
@@ -147,12 +147,12 @@ void ClothUtil::CreateClothVertex() {
 	//initial texture
 	glGenTextures(1, &clothTexture);
 	glBindTexture(GL_TEXTURE_2D, clothTexture);
-	// Îªµ±Ç°°ó¶¨µÄÎÆÀí¶ÔÏóÉèÖÃ»·ÈÆ¡¢¹ıÂË·½Ê½
+	// ä¸ºå½“å‰ç»‘å®šçš„çº¹ç†å¯¹è±¡è®¾ç½®ç¯ç»•ã€è¿‡æ»¤æ–¹å¼
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// ¼ÓÔØ²¢Éú³ÉÎÆÀí
+	// åŠ è½½å¹¶ç”Ÿæˆçº¹ç†
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char *data = stbi_load("./resources/textures/flag.jpg", &width, &height, &nrChannels, 0);
@@ -191,9 +191,9 @@ void ClothUtil::UpdateVertexPosition(float deltaTime) {
 			//cVers[index].vNor = CalNormal(i, j);
 		}
 	}
-	//ĞŞ¸ÄVBOÊı¾İ
+	//ä¿®æ”¹VBOæ•°æ®
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, cVers.size() * sizeof(ClothVertex), &cVers[0], GL_STREAM_DRAW);//¶¥µãÎ»ÖÃºÍ·¨ÏòÁ¿
+	glBufferData(GL_ARRAY_BUFFER, cVers.size() * sizeof(ClothVertex), &cVers[0], GL_STREAM_DRAW);//é¡¶ç‚¹ä½ç½®å’Œæ³•å‘é‡
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ClothVertex), (void*)0);
 	glEnableVertexAttribArray(1);
