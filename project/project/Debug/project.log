@@ -13,15 +13,15 @@
   GLM: angleAxis function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
 c:\users\zhang\coderkk\finalproject\project\project\shader_m.h(65): warning C4101: “infoLog”: 未引用的局部变量
 c:\users\zhang\coderkk\finalproject\project\project\shader_m.h(64): warning C4101: “success”: 未引用的局部变量
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(12): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(279): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(454): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(455): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(459): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(460): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(462): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(463): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(472): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(663): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(19): warning C4067: 预处理器指令后有意外标记 - 应输入换行符
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(199): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(427): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(428): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(432): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(433): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(435): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(436): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(445): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(636): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   project.vcxproj -> C:\Users\zhang\coderkk\finalProject\project\Debug\project.exe

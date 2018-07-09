@@ -10,7 +10,7 @@
 #ifndef __opengl__Particle__
 #define __opengl__Particle__
 
-#include <gltools/GLTools.h>
+//#include <gltools/GLTools.h>
 #include <freeglut/freeglut.h>
 /** Á£×Ó½á¹¹ */
 struct Particle

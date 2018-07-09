@@ -1,7 +1,14 @@
+Ôªø#define _CRT_SECURE_NO_WARNINGS    
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include <glad/glad.h>
 #include <glfw3.h>
+
+//#include <gltools/GLTools.h>
+//#include <gl/GL.h>
+//#include <gl/GLU.h>
+
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <glm/glm.hpp>
@@ -14,128 +21,11 @@
 #include "model.h"
 #include <iostream>
 #include <freeglut/freeglut.h>
-#include <gltools/GLTools.h>
+
 #include "Particle.h"
 using namespace std;
 
-/** ¥¥Ω®“ª∏ˆ¡£◊”¿‡∂‘œÛ */
-//CParticle Snow;
-///** ”√¿¥…Ë÷√¡£◊”µƒ Ù–‘÷µ */
-//float x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec;
-//int r, g, b;
 
-/** ≥ı ºªØ—©ª®¡£◊” */
-//bool InitSnow()
-//{
-//	for (int i = 0; i < Snow.GetNumOfParticle(); ++i)
-//	{
-//		///≥ı ºªØ—’…´£®∞◊…´£©
-//		r = 255;
-//		g = 255;
-//		b = 255;
-//		Snow.SetColor(i, r, g, b);
-//
-//		///≥ı ºªØ◊¯±Í
-//		x = 0.1f * (rand() % 50) - 2.5f;
-//		y = 2 + 0.1f * (rand() % 2);
-//		if ((int)x % 2 == 0)
-//			z = rand() % 6;
-//		else
-//			x = -rand() % 3;
-//		Snow.SetPosition(i, x, y, z);
-//
-//		///≥ı ºªØÀŸ∂»
-//		vx = 0.00001 * (rand() % 100);
-//		vy = 0.0000002 * (rand() % 28000);
-//		vz = 0;
-//		Snow.SetVelocity(i, vx, vy, vz);
-//
-//		///≥ı ºªØº”ÀŸ∂»
-//		ax = 0;
-//		ay = 0.000005f;
-//		az = 0;
-//		Snow.SetAcceleration(i, ax, ay, az);
-//
-//		///≥ı ºªØ…˙√¸÷‹∆⁄
-//		lifetime = 100;
-//		Snow.SetLifeTime(i, lifetime);
-//
-//		///œ˚ ßÀŸ∂»
-//		dec = 0.005 * (rand() % 50);
-//		Snow.SetDec(i, dec);
-//
-//		///≥ı ºªØ¥Û–°
-//		Snow.SetSize(i, 0.03f);
-//	}
-//	return true;
-//}
-/** ∏¸–¬¡£◊” */
-//void UpdateSnow()
-//{
-//	/** ∏¸–¬Œª÷√ */
-//	x += (vx * 5);
-//	y -= vy;
-//
-//	/** ∏¸–¬ÀŸ∂» */
-//	vy += ay;
-//
-//	/** ∏¸–¬…˙¥Ê ±º‰ */
-//	lifetime -= dec;
-//
-//	if (x > 3)
-//		x = -2;
-//
-//	/** »Áπ˚¡£◊”œ˚ ßªÚ…˙√¸Ω· ¯ */
-//	if (y <= -1 || lifetime <= 0)
-//	{
-//		/** ≥ı ºªØŒª÷√ */
-//		x = 0.1f * (rand() % 50) - 2.5f;
-//		y = 2 + 0.1f * (rand() % 2);
-//		if ((int)x % 2 == 0)
-//			z = rand() % 6;
-//		else
-//			z = -rand() % 3;
-//
-//		/** ≥ı ºªØÀŸ∂» */
-//		vx = (float)(0.00001 * (rand() % 100));
-//		vy = (float)(0.0000002 * (rand() % 28000));
-//		vz = 0;
-//
-//		/** ≥ı ºªØº”ÀŸ∂» */
-//		ax = 0;
-//		ay = 0.000005f;
-//		az = 0;
-//		lifetime = 100;
-//		dec = 0.005*(rand() % 50);
-//	}
-//}
-//void DrawParticle()
-//{
-//	/** ∞Û∂®Œ∆¿Ì */
-//	glBindTexture(GL_TEXTURE_2D, texName[1]);
-//
-//	for (int i = 0; i<Snow.GetNumOfParticle(); ++i)
-//	{
-//		/** ªÒµ√¡£◊”µƒÀ˘”– Ù–‘ */
-//		Snow.GetAll(i, r, g, b, x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec);
-//		glLoadIdentity();
-//		glTranslatef(0.0f, 0.0f, -6.0f);
-//		glColor4ub(r, g, b, 255);
-//		glNormal3f(0.0f, 0.0f, 1.0f);   /**< ∂®“Â∑®œﬂ∑ΩœÚ */
-//										/** ª≠≥ˆ¡£◊” */
-//		glBegin(GL_QUADS);
-//		glTexCoord2f(0.0f, 0.0f); glVertex3f(x - size, y - size, z);
-//		glTexCoord2f(1.0f, 0.0f); glVertex3f(x - size, y + size, z);
-//		glTexCoord2f(1.0f, 1.0f); glVertex3f(x + size, y + size, z);
-//		glTexCoord2f(0.0f, 1.0f); glVertex3f(x + size, y - size, z);
-//		glEnd();
-//
-//		/** ∏¸–¬¡£◊” Ù–‘ */
-//		UpdateSnow();
-//		Snow.SetAll(i, r, g, b, x, y, z, vx, vy, vz, ax, ay, az, size, lifetime, dec);
-//	}
-//	glutPostRedisplay();//∑¢ÀÕ‰÷»æ«Î«Û
-//}
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {
 	GLuint TextureID;   // ID handle of the glyph texture
@@ -173,7 +63,9 @@ float lastFrame = 0.0f;
 float fps = 0.0f;
 
 // lighting
-glm::vec3 lightPos(0.0f, 0.0f, 15.0f);
+glm::vec3 lightPos(0.0f, 1000.0f, 200.0f);
+
+
 int main()
 {
 	GLFWwindow* window = initOpenGL();
@@ -184,9 +76,11 @@ int main()
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE); // Enabled by default on some drivers, but not all so always enable to make sure
 
 
 	Shader skyboxShader("./skybox.vs", "./skybox.fs");
+	Shader depthShader("./depthshader.vs", "./depthshader.fs");
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
 	Model ourModel("./newbeach/beach2.obj");
 
@@ -246,29 +140,55 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 
-
 	vector<string> faces
 	{
-		("resources/textures/skybox/right.jpg"),
-		("resources/textures/skybox/left.jpg"),
+		("resources/textures/skybox/front.jpg"),
+		("resources/textures/skybox/back.jpg"),
+
 		("resources/textures/skybox/top.jpg"),
 		("resources/textures/skybox/bottom.jpg"),
-		("resources/textures/skybox/back.jpg"),
-		("resources/textures/skybox/front.jpg")
+		("resources/textures/skybox/right.jpg"),
+		("resources/textures/skybox/left.jpg")
 	};
 	unsigned int cubemapTexture = loadCubemap(faces);
-
 
 
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
+	// Depth Map
+	// --------------------
+	GLuint depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+
+	const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+
+	GLuint depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	GLfloat borderColor[] = { 1.0, 1.0, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// Model Config
+	// --------------------
 	glm::vec3 modelPos = glm::vec3(0, 0, 0);
 
 	// shader configuration
 	// --------------------
 	modelShader.use();
 	modelShader.setInt("material.diffuse", 0);
+	modelShader.setInt("shadowMap", 1);
 
 	// render loop
 	// -----------
@@ -285,11 +205,11 @@ int main()
 		// input
 		// -----
 		processInput(window);
-		//∞¥qœÚ…œ“∆∂ØæµÕ∑
+		//ÊåâqÂêë‰∏äÁßªÂä®ÈïúÂ§¥
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 			modelPos.y -= 25 * deltaTime;
 		}
-		//∞¥eœÚœ¬“∆∂ØæµÕ∑
+		//ÊåâeÂêë‰∏ãÁßªÂä®ÈïúÂ§¥
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			modelPos.y += 25 * deltaTime;
 		}
@@ -298,17 +218,33 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// display text
-		{
-			stringstream ss;
-			ss << fps;;
-			string temp;
-			ss >> temp;
-			ss.clear();
-			string fpsShow = "FPS:  " + temp;
-			RenderText(textShader, fpsShow, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-		}
+		// 1. Render depth of scene to texture (from light's perspective)
+		// - Get light projection/view matrix.
+		glm::mat4 lightProjection, lightView;
+		glm::mat4 lightSpaceMatrix;
+		GLfloat near_plane = 1.0f, far_plane = 7.5f;
+		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+		//lightProjection = glm::perspective(90.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
+		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		lightSpaceMatrix = lightProjection * lightView;
 
+		// - render scene from light's point of view
+		depthShader.use();
+		depthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glm::mat4 model;
+			depthShader.setMat4("model", model);
+			ourModel.Draw(depthShader);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// Reset viewport
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// 2. ÂÉèÂæÄÂ∏∏‰∏ÄÊ†∑Ê∏≤ÊüìÂú∫ÊôØÔºå‰ΩÜËøôÊ¨°‰ΩøÁî®Ê∑±Â∫¶Ë¥¥Âõæ
 		//model
 		{
 			//modelShader.use();
@@ -324,6 +260,7 @@ int main()
 			////model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 			//modelShader.setMat4("model", model);
 			modelShader.use();
+			modelShader.setInt("shadowMap", 1);
 			modelShader.setVec3("light.position", lightPos);
 			modelShader.setVec3("viewPos", camera.Position);
 
@@ -333,19 +270,35 @@ int main()
 			modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 			// material properties
-			modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-			modelShader.setFloat("material.shininess", 64.0f);
+			// modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			modelShader.setVec3("material.specular", 0.1f, 0.1f, 0.1f);
+			// modelShader.setFloat("material.shininess", 64.0f);
+			modelShader.setFloat("material.shininess", 16.0f);
 
 			// view/projection transformations
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
+			modelShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
+			glActiveTexture(GL_TEXTURE1);
+			glBindTexture(GL_TEXTURE_2D, depthMap);
 			// world transformation
 			glm::mat4 model;
 			modelShader.setMat4("model", model);
 			ourModel.Draw(modelShader);
+		}
+
+		// display text
+		{
+			stringstream ss;
+			ss << fps;;
+			string temp;
+			ss >> temp;
+			ss.clear();
+			string fpsShow = "FPS:  " + temp;
+			RenderText(textShader, fpsShow, 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 		}
 
 		// skybox
@@ -386,9 +339,10 @@ GLFWwindow* initOpenGL() {
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
@@ -434,9 +388,28 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		lightPos.y += 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+		lightPos.y -= 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		lightPos.z += 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		lightPos.z -= 10.0f;
+		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
+	}
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// glfw: whenever the window Size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -619,7 +592,7 @@ void initText(Shader textShader) {
 	if (FT_New_Face(ft, "C:/Windows/Fonts/Arial.ttf", 0, &face))
 		cout << "ERROR::FREETYPE: Failed to load font" << endl;
 
-	// …Ë÷√◊÷ÃÂøÌ∂»∫Õ∏ﬂ∂»øÌ∂»…Ë÷√Œ™0∏˘æ›∏ﬂ∂»∂ØÃ¨º∆À„
+	// ËÆæÁΩÆÂ≠ó‰ΩìÂÆΩÂ∫¶ÂíåÈ´òÂ∫¶ÂÆΩÂ∫¶ËÆæÁΩÆ‰∏∫0Ê†πÊçÆÈ´òÂ∫¶Âä®ÊÄÅËÆ°ÁÆó
 	FT_Set_Pixel_Sizes(face, 0, 48);
 
 	// Disable byte-alignment restriction
