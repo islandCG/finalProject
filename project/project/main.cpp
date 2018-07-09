@@ -32,8 +32,8 @@ void RenderText(Shader &shader, std::string text, GLfloat x, GLfloat y, GLfloat 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(const char *path);
 unsigned int loadCubemap(vector<string> faces);
@@ -44,7 +44,7 @@ const unsigned int SCR_WIDTH = 1080;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(22.0f, 10.0f, 77.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -82,7 +82,7 @@ int main()
 	Model ourModel("./newbeach/beach_final_test.obj");
 	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
-	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-10, 10, -15) + glm::vec3(-22, -12, -77));
+	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-10, 10, -20));
 
 
 	float skyboxVertices[] = {
@@ -215,25 +215,12 @@ int main()
 		// -----
 		processInput(window);
 		//按q向上移动镜头
-		if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 			modelPos.y -= 25 * deltaTime;
 		}
 		//按e向下移动镜头
-		if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			modelPos.y += 25 * deltaTime;
-		}
-		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
-			modelPos.x -= 25 * deltaTime;
-		}
-		if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
-			modelPos.x += 25 * deltaTime;
-			cout << 3 << endl;
-		}
-		if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
-			modelPos.z -= 25 * deltaTime;
-		}
-		if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
-			modelPos.z += 25 * deltaTime;
 		}
 		// render
 		// ------
@@ -245,7 +232,7 @@ int main()
 		// - Get light projection/view matrix.
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
-		GLfloat near_plane = 1.0f, far_plane = 100.0f;
+		GLfloat near_plane = 1.0f, far_plane = 1000.0f;
 		//lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 		lightProjection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
@@ -313,7 +300,6 @@ int main()
 			glBindTexture(GL_TEXTURE_2D, depthMap);
 			// world transformation
 			glm::mat4 model;
-			model = glm::translate(model, glm::vec3(-22, -12, -77));
 			modelShader.setMat4("model", model);
 			ourModel.Draw(modelShader);
 		}
@@ -342,6 +328,9 @@ int main()
 					firstChange = false;
 				}
 			}
+			//lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
+			////cout << "y  " << lightPos.y << endl;
+			//lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
 			glm::mat4 view = camera.GetViewMatrix();
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			// draw skybox as last
@@ -369,7 +358,7 @@ int main()
 			glm::mat4 model;
 			model = glm::mat4();
 			//model = glm::translate(model, glm::vec3(0, 5, -2));
-			model = glm::translate(model, glm::vec3(0, 5, 10) + glm::vec3(-22, -12, -77));
+			model = glm::translate(model, glm::vec3(0, 5, 10));
 			model = glm::scale(model, glm::vec3(3, 3, 3));
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
@@ -455,12 +444,12 @@ GLFWwindow* initOpenGL() {
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
