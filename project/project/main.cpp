@@ -12,8 +12,9 @@
 #include "model.h"
 #include <iostream>
 #include <freeglut/freeglut.h>
-#include "Particle.h"
+#include <gltools/GLTools.h>
 #include "cloth.h"
+#include "particle.h"
 using namespace std;
 
 /// Holds all state information relevant to a character as loaded using FreeType
@@ -53,7 +54,7 @@ float lastFrame = 0.0f;
 float fps = 0.0f;
 
 // lighting
-glm::vec3 lightPos(20.0f, 20.0f, 20.0f);
+glm::vec3 lightPos(20.0f, 15.0f, 20.0f);
 
 
 int main()
@@ -74,7 +75,9 @@ int main()
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
 	Shader clothShader("./cloth.vs", "./cloth.fs");
 	Model ourModel("./newbeach/beach_final_test.obj");
+	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
+	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(5, 10, -5));
 
 
 	float skyboxVertices[] = {
@@ -225,8 +228,8 @@ int main()
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
 		GLfloat near_plane = 1.0f, far_plane = 100.0f;
-		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		//lightProjection = glm::perspective(90.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
+		//lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+		lightProjection = glm::perspective(45.0f, (GLfloat)SHADOW_WIDTH/(GLfloat)SHADOW_HEIGHT, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
 		lightSpaceMatrix = lightProjection * lightView;
 
@@ -244,7 +247,6 @@ int main()
 
 		// display text
 		{
-			glEnable(GL_CULL_FACE);
 			stringstream ss;
 			ss << fps;;
 			string temp;
@@ -261,18 +263,6 @@ int main()
 		// 2. 像往常一样渲染场景，但这次使用深度贴图
 		//model
 		{
-			//modelShader.use();
-
-			//glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10000.0f);
-			//glm::mat4 view = camera.GetViewMatrix();
-			//modelShader.setMat4("projection", projection);
-			//modelShader.setMat4("view", view);
-
-			//glm::mat4 model;
-			//model = glm::translate(model, modelPos);
-			////model = glm::translate(model, glm::vec3(0.0f, -50.0f, 0.0f));
-			////model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-			//modelShader.setMat4("model", model);
 			glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			modelShader.use();
@@ -322,9 +312,9 @@ int main()
 
 		// skybox
 		{
-			lightPos.y = sin(glfwGetTime() / 3.0f) * 20.0f;
+			lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
 			cout << "y  " << lightPos.y << endl;
-			lightPos.z = sin(glfwGetTime() / 3.0f) * 20.0f;
+			lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
 			glm::mat4 view = camera.GetViewMatrix();
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			// draw skybox as last
@@ -348,7 +338,6 @@ int main()
 
 		//cloth
 		{
-			glDisable(GL_CULL_FACE);
 			clothShader.use();
 			glm::mat4 model;
 			model = glm::mat4();
@@ -369,6 +358,36 @@ int main()
 			clothShader.setFloat("specularStrength", 1);
 			clothShader.setInt("shiny", 32);
 			ourCloth.ClothSimulating(clothShader, deltaTime, 0.098, 0.5, 0.5, glm::vec3(2, 0, 1));
+		}
+
+		//particles
+		{
+			modelShader.use();
+			modelShader.setVec3("light.position", lightPos);
+			modelShader.setVec3("viewPos", camera.Position);
+
+			// light properties
+			modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+			modelShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+			modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+			// material properties
+			modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			modelShader.setFloat("material.shininess", 64.0f);
+
+			// view/projection transformations
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 view = camera.GetViewMatrix();
+			modelShader.setMat4("projection", projection);
+			modelShader.setMat4("view", view);
+			ourParticle.simulate(deltaTime);
+			for (int i = 0; i < ourParticle.particles.size(); i++) {
+				//modelShader.setFloat("alpha", ourParticle.particles[i].color.a);
+				glm::mat4 model = ourParticle.particles[i].model;
+				modelShader.setMat4("model", model);
+				flowerModel.Draw(modelShader);
+			}
+			
 		}
 
 		glfwSwapBuffers(window);
@@ -623,7 +642,7 @@ void RenderText(Shader &shader, string text, GLfloat x, GLfloat y, GLfloat scale
 
 void initText(Shader textShader) {
 	// Set OpenGL options
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

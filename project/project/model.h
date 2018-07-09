@@ -28,7 +28,11 @@ int a = 0;
 class Model {
 public:
 	/*º¯Êý*/
+	Model() {}
 	Model(const char* path) {
+		loadModel(path);
+	}
+	void load(const char* path) {
 		loadModel(path);
 	}
 	void Draw(Shader shader);
