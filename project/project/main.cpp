@@ -132,7 +132,7 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 
-	vector<string> faces
+	vector<string> facesDay
 	{
 		("resources/textures/skybox/front.jpg"),
 		("resources/textures/skybox/back.jpg"),
@@ -141,8 +141,18 @@ int main()
 		("resources/textures/skybox/right.jpg"),
 		("resources/textures/skybox/left.jpg")
 	};
-	unsigned int cubemapTexture = loadCubemap(faces);
+	unsigned int cubemapTextureDay = loadCubemap(facesDay);
 
+	vector<string> facesNight
+	{
+		("resources/textures/skybox1/front.jpg"),
+		("resources/textures/skybox1/back.jpg"),
+		("resources/textures/skybox1/top.jpg"),
+		("resources/textures/skybox1/bottom.jpg"),
+		("resources/textures/skybox1/right.jpg"),
+		("resources/textures/skybox1/left.jpg")
+	};
+	unsigned int cubemapTextureNight = loadCubemap(facesNight);
 
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
@@ -307,6 +317,9 @@ int main()
 
 		// skybox
 		{
+			lightPos.y = sin(glfwGetTime() / 2.0f) * 100.0f;
+			cout << "y  " << lightPos.y << endl;
+			lightPos.z = sin(glfwGetTime() / 2.0f) * 100.0f;
 			glm::mat4 view = camera.GetViewMatrix();
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			// draw skybox as last
@@ -318,7 +331,11 @@ int main()
 			// skybox cube
 			glBindVertexArray(skyboxVAO);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+			if (lightPos.y >= 0.0f) {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureDay);
+			}    else {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTextureNight);
+			}
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 			glBindVertexArray(0);
 			glDepthFunc(GL_LESS); // set depth function back to default

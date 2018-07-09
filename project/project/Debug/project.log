@@ -1,5 +1,4 @@
-﻿  glad.c
-  main.cpp
+﻿  main.cpp
   GLM: rotate function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   GLM: rotate_slow function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
@@ -18,20 +17,19 @@ c:\users\zhang\coderkk\finalproject\project\project\cloth.h(69): warning C4244: 
 c:\users\zhang\coderkk\finalproject\project\project\cloth.h(72): warning C4305: “参数”: 从“double”到“float”截断
 c:\users\zhang\coderkk\finalproject\project\project\cloth.h(98): warning C4305: “=”: 从“double”到“float”截断
 c:\users\zhang\coderkk\finalproject\project\project\cloth.h(290): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(190): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(345): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(346): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(349): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(457): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(458): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(462): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(463): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(465): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(466): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(475): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(666): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(200): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(320): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(322): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(362): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(363): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(366): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(474): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(475): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(479): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(480): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(482): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(483): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(492): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(683): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
-  Particle.cpp
-  stb_image.cpp
-  正在生成代码...
   project.vcxproj -> C:\Users\zhang\coderkk\finalProject\project\Debug\project.exe
