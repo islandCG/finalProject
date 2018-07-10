@@ -18,20 +18,31 @@ c:\users\zhang\coderkk\finalproject\project\project\cloth.h(72): warning C4305: 
 c:\users\zhang\coderkk\finalproject\project\project\cloth.h(98): warning C4305: “=”: 从“double”到“float”截断
 c:\users\zhang\coderkk\finalproject\project\project\cloth.h(290): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
 c:\users\zhang\coderkk\finalproject\project\project\particle.h(69): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(203): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(315): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(317): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(356): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(357): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(360): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(384): warning C4018: “<”: 有符号/无符号不匹配
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(498): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(499): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(503): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(504): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(506): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(507): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(516): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\zhang\coderkk\finalproject\project\project\main.cpp(707): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(91): warning C4838: 从“double”转换到“const GLfloat”需要收缩转换
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(91): warning C4305: “初始化”: 从“double”到“const GLfloat”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(97): warning C4305: “初始化”: 从“double”到“const GLfloat”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(102): warning C4305: “初始化”: 从“double”到“const GLfloat”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(311): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(423): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(425): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(470): warning C4305: “+=”: 从“double”到“GLfloat”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(509): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(510): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(513): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(537): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(654): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(655): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(659): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(660): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(662): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(663): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(672): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(863): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(906): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(907): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(915): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(922): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(925): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\zhang\coderkk\finalproject\project\project\main.cpp(986): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   project.vcxproj -> C:\Users\zhang\coderkk\finalProject\project\Debug\project.exe
