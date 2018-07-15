@@ -164,7 +164,7 @@ int main()
 	Shader oceanShader("./oceanshader.vs", "./oceanshader.fs");
     unsigned int waterTexture = loadTexture("./resources/textures/water.jpeg");
 
-	Model ourModel("./newbeach/beach_final_test.obj");
+	Model ourModel("./newbeach/beach_final.obj");
 	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
 	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-10, 10, -20));
