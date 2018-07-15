@@ -13,26 +13,36 @@
   GLM: angleAxis function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
 c:\users\弗老大\desktop\cg\finalproject\project\project\shader_m.h(65): warning C4101: “infoLog”: 未引用的局部变量
 c:\users\弗老大\desktop\cg\finalproject\project\project\shader_m.h(64): warning C4101: “success”: 未引用的局部变量
-c:\users\弗老大\desktop\cg\finalproject\project\project\camera.h(73): warning C4305: “=”: 从“double”到“float”截断
 c:\users\弗老大\desktop\cg\finalproject\project\project\cloth.h(69): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
 c:\users\弗老大\desktop\cg\finalproject\project\project\cloth.h(72): warning C4305: “参数”: 从“double”到“float”截断
 c:\users\弗老大\desktop\cg\finalproject\project\project\cloth.h(98): warning C4305: “=”: 从“double”到“float”截断
 c:\users\弗老大\desktop\cg\finalproject\project\project\cloth.h(290): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\particle.h(69): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(208): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(322): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(324): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(373): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(374): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(377): warning C4305: “参数”: 从“double”到“float”截断
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(401): warning C4018: “<”: 有符号/无符号不匹配
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(529): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(530): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(534): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(535): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(537): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(538): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(547): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(738): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\弗老大\desktop\cg\finalproject\project\project\particle.h(71): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(96): warning C4838: 从“double”转换到“const GLfloat”需要收缩转换
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(96): warning C4305: “初始化”: 从“double”到“const GLfloat”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(102): warning C4305: “初始化”: 从“double”到“const GLfloat”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(107): warning C4305: “初始化”: 从“double”到“const GLfloat”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(317): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(443): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(445): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(501): warning C4305: “+=”: 从“double”到“GLfloat”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(539): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(540): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(543): warning C4305: “参数”: 从“double”到“float”截断
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(568): warning C4018: “<”: 有符号/无符号不匹配
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(699): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(700): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(704): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(705): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(707): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(708): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(717): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(908): warning C4838: 从“FT_Pos”转换到“GLuint”需要收缩转换
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(951): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(952): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(960): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(967): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(970): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+c:\users\弗老大\desktop\cg\finalproject\project\project\main.cpp(1031): warning C4244: “=”: 从“double”转换到“GLfloat”，可能丢失数据
   GLM: perspective function taking degrees as a parameter is deprecated. #define GLM_FORCE_RADIANS before including GLM headers to remove this message.
   project.vcxproj -> C:\Users\弗老大\Desktop\cg\finalProject\project\Debug\project.exe
