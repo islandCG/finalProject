@@ -36,6 +36,7 @@ public:
 	void applyForce();
 	void updatePos(float dt);
 	void render();
+	void setInitPos(glm::vec3 pos);
 	vector<particle> particles;
 private:
 	unsigned int VAO, VBO, EBO;
@@ -54,6 +55,7 @@ ParticleSystem::ParticleSystem(int count, glm::vec3 force, glm::vec3 pos) {
 	this->initPos = pos;
 	init();
 }
+
 
 void ParticleSystem::init() {
 	srand(unsigned(time(NULL)));
@@ -128,6 +130,10 @@ void ParticleSystem::init() {
 	////glEnableVertexAttribArray(2);
 	//glBindVertexArray(0);
 	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void ParticleSystem::setInitPos(glm::vec3 pos) {
+	this->initPos = pos;
 }
 
 void ParticleSystem::simulate(float dt) {

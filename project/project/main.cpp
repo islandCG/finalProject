@@ -11,8 +11,6 @@
 #include "camera.h"
 #include "model.h"
 #include <iostream>
-#include <freeglut/freeglut.h>
-#include <gltools/GLTools.h>
 #include "cloth.h"
 #include "particle.h"
 using namespace std;
@@ -44,7 +42,7 @@ const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(22.0f, 10.0f, 77.0f));
+Camera camera(glm::vec3(-4.0f, 16.0f, 42.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -162,13 +160,13 @@ int main()
 	Shader modelShader("./modelshader.vs", "./modelshader.fs");
 	Shader clothShader("./cloth.vs", "./cloth.fs");
 	Shader oceanShader("./oceanshader.vs", "./oceanshader.fs");
-    unsigned int waterTexture = loadTexture("./resources/textures/water.jpeg");
+    unsigned int waterTexture = loadTexture("./resources/textures/water.jpg");
 
 	Model ourModel("./newbeach/beach_final.obj");
 	Model flowerModel("./flower/flower.obj");
 	
 	ClothUtil ourCloth = ClothUtil(15);
-	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-10, 10, -20));
+	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-40, 18, -29));
 
 
 	float skyboxVertices[] = {
@@ -324,13 +322,26 @@ int main()
 		// -----
 		processInput(window);
 		//按q向上移动镜头
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-			modelPos.y -= 25 * deltaTime;
-		}
-		//按e向下移动镜头
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-			modelPos.y += 25 * deltaTime;
-		}
+		//if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+		//	modelPos.y -= 5 * deltaTime;
+		//}
+		////按e向下移动镜头
+		//if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+		//	modelPos.y += 5 * deltaTime;
+		//}
+		//if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+		//	modelPos.x -= 5 * deltaTime;
+		//}
+		//if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
+		//	modelPos.x += 5 * deltaTime;
+		//}
+		//if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
+		//	modelPos.z -= 5 * deltaTime;
+		//}
+		//if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
+		//	modelPos.z += 5 * deltaTime;
+		//}
+		
 		// render
 		// ------
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -385,12 +396,12 @@ int main()
 			//modelShader.setVec3("viewPos", camera.Position);
 
 			// light properties
-			modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-			modelShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+			modelShader.setVec3("light.ambient", 0.3f, 0.3f, 0.3f);
+			modelShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
 			modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 			// material properties
-			// modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			 //modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 			modelShader.setVec3("material.specular", 0.1f, 0.1f, 0.1f);
 			// modelShader.setFloat("material.shininess", 64.0f);
 			modelShader.setFloat("material.shininess", 16.0f);
@@ -473,10 +484,11 @@ int main()
 			glm::mat4 projection;
 			glm::mat4 view;
 			glm::mat4 model;
-			projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			view = camera.GetViewMatrix();
-			model = glm::translate(model, glm::vec3(15, -10.5, 12));
-			// model = glm::scale(model, glm::vec3(3, 3, 3));
+			model = glm::translate(model, glm::vec3(-16.3, -8.9, -6.3));
+			//model = glm::translate(model, modelPos);
+			//model = glm::scale(model, glm::vec3(0.5));
 			oceanShader.setMat4("projection", projection);
 			oceanShader.setMat4("view", view);
 			oceanShader.setMat4("model", model);
@@ -484,7 +496,7 @@ int main()
 			// glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, waterTexture);
 
-			values.time += 0.05;
+			values.time += 0.10;
 			calcuWave();
 
 			// Draw
@@ -511,8 +523,7 @@ int main()
 			clothShader.use();
 			glm::mat4 model;
 			model = glm::mat4();
-			//model = glm::translate(model, glm::vec3(0, 5, -2));
-			model = glm::translate(model, glm::vec3(0, 5, 10));
+			model = glm::translate(model, glm::vec3(-1.1, 13, 9.3));
 			model = glm::scale(model, glm::vec3(3, 3, 3));
 			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
@@ -532,6 +543,7 @@ int main()
 
 		//particles
 		{
+			//ourParticle.setInitPos(modelPos);
 			modelShader.use();
 			modelShader.setVec3("light.position", lightPos);
 			modelShader.setVec3("viewPos", camera.Position);

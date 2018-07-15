@@ -14,10 +14,10 @@ uniform vec3 viewPos;
 void main()
 {
     // settings
-    float ambientStrength = 0.2;
-    float diffStrength = 0.4;
-    float specularStrength = 0.7;
-    float shininess = 32;
+    float ambientStrength = 0.5;
+    float diffStrength = 0.9;
+    float specularStrength = 0.9;
+    float shininess = 8;
 
     vec3 color = texture(diffuseTexture, TexCoords).rgb;
 
@@ -37,5 +37,5 @@ void main()
     vec3 specular = specularStrength * spec * lightColor;
 
     vec3 result = (ambient + diffuse + specular) * color;
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 0.7);
 }
