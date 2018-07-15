@@ -215,13 +215,14 @@ int main()
 		// -----
 		processInput(window);
 		//按q向上移动镜头
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-			modelPos.y -= 25 * deltaTime;
-		}
-		//按e向下移动镜头
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-			modelPos.y += 25 * deltaTime;
-		}
+		//if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+		//	modelPos.y -= 25 * deltaTime;
+		//}
+		////按e向下移动镜头
+		//if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		//	modelPos.y += 25 * deltaTime;
+		//}
+		
 		// render
 		// ------
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -277,11 +278,11 @@ int main()
 
 			// light properties
 			modelShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-			modelShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+			modelShader.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
 			modelShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 			// material properties
-			// modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+			 //modelShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 			modelShader.setVec3("material.specular", 0.1f, 0.1f, 0.1f);
 			// modelShader.setFloat("material.shininess", 64.0f);
 			modelShader.setFloat("material.shininess", 16.0f);
@@ -448,8 +449,8 @@ GLFWwindow* initOpenGL() {
 	glfwSetScrollCallback(window, scroll_callback);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
