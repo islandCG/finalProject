@@ -32,6 +32,7 @@ void RenderText(Shader &shader, std::string text, GLfloat x, GLfloat y, GLfloat 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 unsigned int loadTexture(const char *path);
@@ -39,11 +40,11 @@ unsigned int loadCubemap(vector<string> faces);
 
 GLFWwindow* initOpenGL();
 // settings
-const unsigned int SCR_WIDTH = 1920;
-const unsigned int SCR_HEIGHT = 1080;
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(22.0f, 10.0f, 77.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -52,6 +53,10 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float fps = 0.0f;
+
+//dayornight
+bool dnFlag = false;
+bool firstChange = false;
 
 // lighting
 glm::vec3 lightPos(10.0f, 25.0f, 10.0f);
@@ -162,7 +167,7 @@ int main()
 	Model ourModel("./newbeach/beach_final_test.obj");
 	Model flowerModel("./flower/flower.obj");
 	ClothUtil ourCloth = ClothUtil(15);
-	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(5, 10, -5));
+	ParticleSystem ourParticle = ParticleSystem(300, glm::vec3(0, -0.98, 0), glm::vec3(-10, 10, -20));
 
 
 	float skyboxVertices[] = {
@@ -335,7 +340,7 @@ int main()
 		// - Get light projection/view matrix.
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
-		GLfloat near_plane = 1.0f, far_plane = 100.0f;
+		GLfloat near_plane = 1.0f, far_plane = 1000.0f;
 		//lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 		lightProjection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
@@ -390,7 +395,7 @@ int main()
 			modelShader.setFloat("material.shininess", 16.0f);
 
 			// view/projection transformations
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
@@ -420,11 +425,22 @@ int main()
 
 		// skybox
 		{
-			lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
-			//cout << "y  " << lightPos.y << endl;
-			lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
+			if (dnFlag) {
+				lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
+				//cout << "y  " << lightPos.y << endl;
+				lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
+			}
+			else {
+				if (firstChange) {
+					lightPos = glm::vec3((10.0f, 25.0f, 10.0f));
+					firstChange = false;
+				}
+			}
+			//lightPos.y = sin(glfwGetTime() / 3.0f) * 10.0f;
+			////cout << "y  " << lightPos.y << endl;
+			//lightPos.x = cos(glfwGetTime() / 3.0f) * 10.0f;
 			glm::mat4 view = camera.GetViewMatrix();
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			// draw skybox as last
 			glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
 			skyboxShader.use();
@@ -458,7 +474,7 @@ int main()
 			glm::mat4 model;
 			projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			view = camera.GetViewMatrix();
-			model = glm::translate(model, glm::vec3(0, -9, 5));
+			model = glm::translate(model, glm::vec3(15, -10.5, 12));
 			// model = glm::scale(model, glm::vec3(3, 3, 3));
 			oceanShader.setMat4("projection", projection);
 			oceanShader.setMat4("view", view);
@@ -497,7 +513,7 @@ int main()
 			//model = glm::translate(model, glm::vec3(0, 5, -2));
 			model = glm::translate(model, glm::vec3(0, 5, 10));
 			model = glm::scale(model, glm::vec3(3, 3, 3));
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			clothShader.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 			clothShader.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
@@ -529,7 +545,7 @@ int main()
 			modelShader.setFloat("material.shininess", 64.0f);
 
 			// view/projection transformations
-			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+			glm::mat4 projection = glm::perspective(45.0f, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
 			glm::mat4 view = camera.GetViewMatrix();
 			modelShader.setMat4("projection", projection);
 			modelShader.setMat4("view", view);
@@ -584,6 +600,7 @@ GLFWwindow* initOpenGL() {
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetKeyCallback(window, key_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
 	// tell GLFW to capture our mouse
@@ -634,6 +651,19 @@ void processInput(GLFWwindow *window)
 		lightPos.z -= 1.0f;
 		cout << lightPos.x << "    " << lightPos.y << "    " << lightPos.z << endl;
 	}
+}
+
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod) {
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		dnFlag = !dnFlag;
+		firstChange = true;
+	}
+	//if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+	//	camera.ProcessKeyboard(FORWARD, deltaTime);
+	//}
+	//if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+	//	camera.ProcessKeyboard(BACKWARD, deltaTime);
+	//}
 }
 
 // glfw: whenever the window Size changed (by OS or user resize) this callback function executes

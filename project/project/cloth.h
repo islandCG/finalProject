@@ -71,9 +71,9 @@ ClothUtil::ClothUtil(int clothResolution) {
 	//width = 1;
 	CalRestlen(0.05);
 	//initial stiff
-	stiff[0] = 50;
+	stiff[0] = 40;
 	stiff[1] = 30;
-	stiff[2] = 30;
+	stiff[2] = 20;
 	//intial cofficient
 	//Cg = 0.98;
 	//Cd = 0.5;
